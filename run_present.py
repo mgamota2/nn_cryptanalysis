@@ -129,13 +129,13 @@ def generate_ciphertext_plaintext_pairs(rounds, sbox, pbox, pbox_inv, pbox_name,
 
     # Save dataset to CSV
     os.makedirs("./data", exist_ok=True)
-    # with open(filename, "w", newline="", encoding="utf-8") as csvfile:
-    #     fieldnames = ["word", "plaintext_hex", "ciphertext_hex", "plaintext_bits", "ciphertext_bits"]
-    #     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-    #     writer.writeheader()
-    #     writer.writerows(dataset)
+    with open(filename, "w", newline="", encoding="utf-8") as csvfile:
+        fieldnames = ["word", "plaintext_hex", "ciphertext_hex", "plaintext_bits", "ciphertext_bits"]
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(dataset)
 
-    # print(f"✓ Saved {len(dataset)} pairs to {filename}")
+    print(f"✓ Saved {len(dataset)} pairs to {filename}")
 
 
 def random_generate_ciphertext_plaintext_pairs(rounds, sbox, pbox, pbox_inv, pbox_name, wordlist_file="random_data.txt"):
@@ -181,11 +181,11 @@ def random_generate_ciphertext_plaintext_pairs(rounds, sbox, pbox, pbox_inv, pbo
         })
 
     os.makedirs("./new_data", exist_ok=True)
-    # with open(filename, "w", newline="", encoding="utf-8") as csvfile:
-    #     fieldnames = ["word", "plaintext_hex", "ciphertext_hex", "plaintext_bits", "ciphertext_bits"]
-    #     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-    #     writer.writeheader()
-    #     writer.writerows(dataset)
+    with open(filename, "w", newline="", encoding="utf-8") as csvfile:
+        fieldnames = ["word", "plaintext_hex", "ciphertext_hex", "plaintext_bits", "ciphertext_bits"]
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(dataset)
 
     print(f"✓ Saved {len(dataset)} pairs to {filename}")
 
