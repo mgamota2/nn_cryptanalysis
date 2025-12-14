@@ -36,7 +36,6 @@ pbox_default = [0,16,32,48,1,17,33,49,2,18,34,50,3,19,35,51,
 
 pbox_trivial = list(range(64))  # Identity permutation (no diffusion)
 
-# Weak diffusion P-box (keeps bits more localized)
 pbox_weak = [0,1,2,3,16,17,18,19,32,33,34,35,48,49,50,51,
              4,5,6,7,20,21,22,23,36,37,38,39,52,53,54,55,
              8,9,10,11,24,25,26,27,40,41,42,43,56,57,58,59,
@@ -102,7 +101,7 @@ def parse_filename(filename: str) -> Dict:
     pbox = None
     for part in parts:
         if part.startswith("p"):
-            avalanche_effect = part[1:]
+            pbox = part[1:]
             break
     
     return {
@@ -162,7 +161,6 @@ def decrypt_csv(filepath: str, key: bytes, verbose: bool = True) -> Tuple[pd.Dat
         print(f"  Plaintext Type: {params['plaintext_type']}")
     
     # Initialize cipher
-    cipher = Present(key, rounds=params["rounds"], sbox=curr_sbox)
     
     # Read bit-level accuracy from row 2
     with open(filepath, "r") as f:
@@ -188,6 +186,18 @@ def decrypt_csv(filepath: str, key: bytes, verbose: bool = True) -> Tuple[pd.Dat
     
     # Process each row
     for idx, row in df.iterrows():
+        # need to determine the P-box
+        if params["pbox"] == "Default":
+            pbox = pbox_default
+            pbox_inv = pbox_default_inv
+        elif params["pbox"] == "Trivial":
+            pbox = pbox_trivial
+            pbox_inv = pbox_trivial_inv
+        elif params["pbox"] == "Weak":
+            pbox = pbox_weak
+            pbox_inv = pbox_weak_inv
+        cipher = Present(key, rounds=params["rounds"], sbox=curr_sbox, pbox=pbox, pbox_inv=pbox_inv)
+
         # Parse prediction probabilities
         pred_probs = np.array(ast.literal_eval(row["prediction"]), dtype=float)
         actual_bits = np.array(list(map(int, row["actual_bits"])), dtype=float)

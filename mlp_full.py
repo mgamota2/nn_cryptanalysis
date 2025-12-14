@@ -13,7 +13,7 @@ import math
 rounds = [1,2,3,4,5,6,7,8,9,10,16,32]
 hidden_sizes = [128,256,512,1024]
 prefixes = ["", "random_"]
-DATA_DIR = "./data" # Updated from new_data
+DATA_DIR = "./new_data"
 RESULTS_DIR = "./new_results"
 
 def train_model(gpu_id, tasks, queue):
@@ -31,7 +31,7 @@ def train_model(gpu_id, tasks, queue):
             hidden_size, curr_round, prefix = task
             
             # Find all CSV files matching the pattern
-            pattern = f"{DATA_DIR}/{prefix}{curr_round}_rounds_nl*_aw*_bits.csv"
+            pattern = f"{DATA_DIR}/{prefix}{curr_round}_rounds_nl*_aw*_p*_bits.csv"
             matching_files = sorted(glob.glob(pattern))
             
             if not matching_files:
@@ -48,8 +48,10 @@ def train_model(gpu_id, tasks, queue):
                     
                     nl_str = [p for p in parts if p.startswith("nl")][0]
                     aw_str = [p for p in parts if p.startswith("aw")][0]
+                    pbox_name = [p for p in parts if p.startswith("p")][0]
                     
                     curr_nl = int(nl_str[2:])
+                    pbox_name = str(pbox_name[1:])
                     # Handle aw which might have decimal points or not, but filename format is usually consistent
                     # If aw is like aw0.5, it formats as aw0.5. If aw1, aw1.
                     # The original code did: float(aw_str[2:])
@@ -105,7 +107,7 @@ def train_model(gpu_id, tasks, queue):
                         bit_accuracy = (preds_rounded == Y_test).float().mean().item()
                     
                     # === Save results ===
-                    out_filename = f"{RESULTS_DIR}/{prefix}r{curr_round}_nl{curr_nl}_aw{curr_aw}_hs{hidden_size}.csv"
+                    out_filename = f"{RESULTS_DIR}/{prefix}r{curr_round}_nl{curr_nl}_aw{curr_aw}_p{pbox_name}_hs{hidden_size}.csv"
                     with open(out_filename, "w", newline="") as f:
                         writer = csv.writer(f)
                         writer.writerow([f"Rounds: {curr_round}"])

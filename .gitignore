@@ -1,3 +1,4 @@
-results/*
-data/*
+results
+data
 venv
+new_results

@@ -205,7 +205,6 @@ if __name__ == "__main__":
     
     pbox_trivial = list(range(64))  # Identity permutation (no diffusion)
     
-    # Weak diffusion P-box (keeps bits more localized)
     pbox_weak = [0,1,2,3,16,17,18,19,32,33,34,35,48,49,50,51,
                  4,5,6,7,20,21,22,23,36,37,38,39,52,53,54,55,
                  8,9,10,11,24,25,26,27,40,41,42,43,56,57,58,59,
@@ -229,7 +228,6 @@ if __name__ == "__main__":
         ("Weak P-box", pbox_weak, pbox_weak_inv),
     ]
 
-    # Test all 9 combinations
     for sbox_name, sbox in sboxes:
         for pbox_name, pbox, pbox_inv in pboxes:
             name = f"{sbox_name} + {pbox_name}"
